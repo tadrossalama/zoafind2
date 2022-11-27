@@ -2,7 +2,7 @@ from pygbif import occurrences as occ
 from pygbif import registry
 from pygbif import species
 import pandas as pd
-
+from pygbif import *
 
 class Coral:
     def __init__(self):
