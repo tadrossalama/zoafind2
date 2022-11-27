@@ -5,7 +5,6 @@ from PIL import Image
 from fastai.vision.all import *
 from pathlib import Path
 import wikipedia
-from getinfo import *
 from pygbif import maps
 from pygbif import occurrences as occ
 from pygbif import registry
