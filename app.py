@@ -5,7 +5,6 @@ from PIL import Image
 from fastai.vision.all import *
 from pathlib import Path
 import wikipedia
-from pygbif import maps
 
 
 
