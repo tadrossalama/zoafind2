@@ -21,8 +21,8 @@ if upload is not None:
     pred,pred_idx,probs = learn_inf.predict(image)
 
     st.title(f'I am {probs[pred_idx] * 100:.02f}% sure this is a {pred} coral.')
-    coral = Coral()
-    st.table(coral.get_species_name(pred))
+    #coral = Coral()
+    #st.table(coral.get_species_name(pred))
 
     st.write(wikipedia.summary(f'{pred} coral'))
 
