@@ -17,13 +17,15 @@ upload = st.file_uploader('Upload picture of coral here')
 if upload is not None:
 
     image = PILImage.create(upload)
-    st.image(image, caption='Uploaded Image.')
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(image, caption='Uploaded Image.')
     pred,pred_idx,probs = learn_inf.predict(image)
 
-    st.title(f'I am {probs[pred_idx] * 100:.02f}% sure this is a {pred} coral.')
+        st.title(f'I am {probs[pred_idx] * 100:.02f}% sure this is a {pred} coral.')
     #coral = Coral()
     #st.table(coral.get_species_name(pred))
-
-    st.write(wikipedia.summary(f'{pred} coral'))
+    with col2:
+        st.write(wikipedia.summary(f'{pred} coral'))
 
 
