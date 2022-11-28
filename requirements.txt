@@ -6,3 +6,4 @@ fastai==2.7.9
 pandas==1.4.4
 Pillow==9.2.0
 scripts==2.0
+torch==1.12.1
