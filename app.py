@@ -14,7 +14,7 @@ def assistant(x):
     search = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
     messages=[
-        {"role": "system", "content": "You're name is Zoa. You are an AI coral reef expert"},
+        {"role": "system", "content": "You're name is Zoa. You are an AI coral reef expert specilizing in salt water aquariums"},
         {"role": "user", "content":x}
     ])
     return search['choices'][0]['message']['content']
