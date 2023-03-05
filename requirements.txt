@@ -7,3 +7,4 @@ pandas==1.4.4
 Pillow==9.2.0
 scripts==2.0
 torch==1.12.1
+openai==0.27.0
