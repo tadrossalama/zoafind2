@@ -1,15 +1,14 @@
 import openai
-from fastai.learner import export
 import streamlit as st
 import pickle
 from PIL import Image
-from fastai.vision.all import *
 from pathlib import Path
+from transformers import ViTImageProcessor, ViTForImageClassification
+from transformers import AutoFeatureExtractor, AutoModelForImageClassification
 
 key = st.secrets['openai_key']
 openai.api_key = key
-path = Path()
-learn_inf = load_learner(path/'learn3.pkl')
+
 def assistant(x): 
     search = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
@@ -19,6 +18,19 @@ def assistant(x):
     ])
     return search['choices'][0]['message']['content']
 
+def classify_image(image):
+    processor = ViTImageProcessor.from_pretrained("tdros/zoalearn2")
+    model = AutoModelForImageClassification.from_pretrained("tdros/zoalearn2")
+    inputs = processor(image, return_tensors="pt")
+    outputs = model(**inputs)
+    logits = outputs.logits
+    probs, indices = logits.softmax(-1).topk(3)
+    probs = probs[0].tolist()
+    indices = indices[0].tolist()
+    top_class = model.config.id2label[indices[0]]
+
+    predicted_classes = [(model.config.id2label[index], prob) for index, prob in zip(indices, probs)]
+    return top_class,predicted_classes
 
 
 st.title('Zoa Find :mag_right:')
@@ -29,17 +41,16 @@ with tab1:
     upload = st.file_uploader('Upload picture of coral here')
     if upload is not None:
 
-        image = PILImage.create(upload)
+        image = Image.open(upload)
         col1, col2 = st.columns(2)
         with col1:
             st.image(image, caption='Uploaded Image.')
-            pred,pred_idx,probs = learn_inf.predict(image)
+            top_class, pred = classify_image(image)
             
-        #coral = Coral()
-        #st.table(coral.get_species_name(pred))
         with col2:
-            st.header(f'I am {probs[pred_idx] * 100:.02f}% sure this is a {pred} coral.')
-            st.write(assistant(pred))
+            st.subheader(f'I am {pred[0][1] * 100:.02f}% sure this is a {top_class} coral.')
+            st.write(f'my other guesses would be: {pred[1][0]} or a {pred[2][0]} coral.')
+            st.write(assistant(top_class))
 with tab2:
     text_input = st.text_input('Ask Zoa a question')
     if text_input is not None:
